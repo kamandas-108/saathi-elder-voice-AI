@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sathi · ElderVoice AI</title>
+<meta name="description" content="Sathi is a voice companion for seniors: reminders, friendly conversation, well-being check-ins and family alerts.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='28' fill='%233de0c5'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070b16;--ink:#f5f7ff;--mute:#b4bdd9;--teal:#3de0c5;--violet:#8b7bff;--amber:#ffb86b;--red:#ff5d6c;--glass:rgba(255,255,255,.07);--line:rgba(255,255,255,.14)}
+*{box-sizing:border-box;margin:0}html{font-size:18px;scroll-behavior:smooth}html.big{font-size:21px}
+body{background:var(--bg);color:var(--ink);font-family:Nunito,system-ui,sans-serif;line-height:1.55;overflow-x:hidden}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;line-height:1.1;font-weight:800}
+#bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.wrap{position:relative;z-index:1}section{padding:7rem 6vw;max-width:1200px;margin:auto}
+a{color:inherit}:focus-visible{outline:3px solid var(--amber);outline-offset:3px}
+button,input,select{font:inherit;color:inherit}
+.btn{min-height:56px;padding:.7rem 1.6rem;border-radius:99px;border:1px solid var(--line);background:var(--glass);cursor:pointer;font-weight:800;transition:transform .2s,background .2s}
+.btn:hover{transform:translateY(-2px);background:rgba(255,255,255,.14)}
+.btn.main{background:linear-gradient(135deg,var(--teal),var(--violet));color:#04101a;border:0}
+.btn.sos{background:var(--red);color:#fff;border:0}.btn.sm{min-height:44px;padding:.3rem 1rem}
+nav{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;align-items:center;gap:1rem;padding:.8rem 5vw;background:rgba(7,11,22,.72);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.logo{font-family:Fraunces,serif;font-weight:800;font-size:1.4rem;text-decoration:none;margin-right:auto}.logo i{color:var(--teal);font-style:normal}
+nav .links{display:flex;gap:.3rem}nav .links a{padding:.5rem .9rem;border-radius:99px;text-decoration:none;font-weight:600;color:var(--mute)}
+nav .links a:hover,nav .links a.on{color:var(--ink);background:var(--glass)}#burger{display:none}
+#bar{position:fixed;top:0;left:0;height:3px;width:100%;transform-origin:0;transform:scaleX(0);background:linear-gradient(90deg,var(--teal),var(--amber));z-index:30}
+.hero{min-height:100vh;display:grid;grid-template-columns:1.1fr .9fr;align-items:center;gap:2rem;padding-top:8rem}
+.hero h1{font-size:clamp(2.6rem,6vw,4.8rem)}.hero h1 span{display:inline-block}
+.hero p.lead{font-size:1.25rem;color:var(--mute);margin:1.4rem 0 2rem;max-width:34ch}.row{display:flex;gap:1rem;flex-wrap:wrap}
+.demo{background:var(--glass);border:1px solid var(--line);border-radius:28px;padding:1.4rem;backdrop-filter:blur(12px);max-width:360px;justify-self:end;margin-top:22rem}
+.bub{padding:.8rem 1.1rem;border-radius:20px;margin:.5rem 0;max-width:92%;min-height:2.4rem}.bub.u{background:rgba(139,123,255,.3);margin-left:auto}.bub.a{background:rgba(61,224,197,.2)}
+h2{font-size:clamp(2rem,4.5vw,3.2rem);margin-bottom:2.5rem;max-width:18ch}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.4rem;perspective:900px}
+.card{background:var(--glass);border:1px solid var(--line);border-radius:26px;padding:1.8rem;backdrop-filter:blur(10px);transition:transform .15s;transform:rotateX(var(--rx,0)) rotateY(var(--ry,0));transform-style:preserve-3d}
+.card svg{width:48px;height:48px;stroke:var(--teal);fill:none;stroke-width:1.7;margin-bottom:1rem}.card h3{font-size:1.4rem;margin-bottom:.5rem}.card p{color:var(--mute)}
+.steps{counter-reset:s;display:grid;gap:1.2rem}.step{display:flex;gap:1.4rem;align-items:center;padding:1.5rem;border-radius:26px;background:var(--glass);border:1px solid var(--line)}
+.step:before{counter-increment:s;content:counter(s);flex:none;width:58px;height:58px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--amber),var(--red));color:#1a0b05;font:800 1.5rem Fraunces}
+.step q{display:block;color:var(--teal);font-weight:600}.chips{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.2rem}.chips b{padding:.3rem 1rem;border:1px solid var(--line);border-radius:99px;font-weight:600}
+.about p{color:var(--mute);max-width:60ch;margin-bottom:1rem}footer{position:relative;z-index:1;text-align:center;padding:3rem 1rem;border-top:1px solid var(--line);color:var(--mute);background:rgba(7,11,22,.8)}
+#dash{padding-top:7rem;min-height:100vh}.tabs{display:flex;gap:.6rem;flex-wrap:wrap;margin:1.5rem 0}.tabs .btn.on{background:var(--teal);color:#04101a;border:0}
+.panel{display:none}.panel.on{display:block}.panel>*+*{margin-top:1.2rem}
+.talk{text-align:center}#mic{width:150px;height:150px;border-radius:50%;border:0;cursor:pointer;background:radial-gradient(circle at 35% 30%,#9ff5e6,var(--teal) 45%,var(--violet));box-shadow:0 0 60px rgba(61,224,197,.45);display:inline-grid;place-items:center}
+#mic svg{width:60px;stroke:#04101a;fill:none;stroke-width:2}#mic.listening{animation:pulse 1s infinite;background:radial-gradient(circle,#ffd9a8,var(--amber),var(--red))}
+#mic.thinking{animation:spin 1.4s linear infinite}#mic.speaking{animation:pulse .6s infinite}
+@keyframes pulse{50%{transform:scale(1.1)}}@keyframes spin{50%{filter:hue-rotate(120deg);transform:scale(.94)}}
+#status{font-size:1.2rem;font-weight:800;margin:.8rem 0;min-height:1.8rem}#live{color:var(--amber);min-height:1.6rem}
+#log{max-height:320px;overflow:auto;text-align:left;padding:.5rem}.bub.u,.bub.a{width:fit-content}
+.box{background:var(--glass);border:1px solid var(--line);border-radius:22px;padding:1.3rem}
+form.f{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.8rem;align-items:end}
+input,select{width:100%;min-height:52px;padding:.5rem 1rem;border-radius:14px;border:1px solid var(--line);background:rgba(0,0,0,.35)}select option{color:#000}
+label{font-weight:600;font-size:.9rem;color:var(--mute);display:block}.item{display:flex;align-items:center;gap:.8rem;padding:.8rem 0;border-bottom:1px solid var(--line)}.item span{flex:1}.item small{color:var(--mute);display:block}
+.moods{display:flex;gap:.7rem;flex-wrap:wrap;justify-content:center}.moods .btn{font-size:1.1rem}
+dialog{margin:auto;max-width:92vw;width:440px;border:1px solid var(--line);border-radius:28px;background:#0f1528;color:var(--ink);padding:2rem}dialog::backdrop{background:rgba(0,0,0,.65);backdrop-filter:blur(4px)}
+dialog form{display:grid;gap:.9rem}#err{color:var(--red);font-weight:600;min-height:1.4rem}.big-t{font:800 2rem Fraunces;margin-bottom:.6rem}
+#toast{position:fixed;bottom:1.4rem;left:50%;transform:translateX(-50%);z-index:50;background:#1b2340;border:1px solid var(--teal);padding:.8rem 1.4rem;border-radius:99px;opacity:0;transition:opacity .3s;pointer-events:none}#toast.on{opacity:1}
+[hidden]{display:none!important}
+@media(max-width:860px){.hero{grid-template-columns:1fr}.demo{margin-top:1rem;justify-self:start}nav .links{display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;background:#0b1020;padding:1rem}nav .links.open{display:flex}#burger{display:block}#bg{opacity:.55}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div id="bar"></div><canvas id="bg" aria-hidden="true"></canvas>
+<nav aria-label="Main">
+ <a class="logo" href="#home" data-nav="home">Sathi<i>.</i></a>
+ <div class="links" id="links">
+  <a href="#home" data-nav="home">Home</a><a href="#features" data-nav="features">Features</a><a href="#how" data-nav="how">How it works</a><a href="#dashboard" data-nav="dashboard">Dashboard</a><a href="#about" data-nav="about">About</a>
+ </div>
+ <button class="btn sm" id="txt" aria-label="Toggle larger text">A+</button>
+ <span id="guest"><button class="btn sm" id="bLogin">Log in</button> <button class="btn sm main" id="bSign">Sign up</button></span>
+ <span id="usr" hidden><button class="btn sm" id="bOut">Log out</button></span>
+ <button class="btn sm" id="burger" aria-label="Menu">☰</button>
+</nav>
+<div class="wrap">
+<main id="landing">
+ <section id="home" class="hero">
+  <div>
+   <h1 id="h1">Just say it. Sathi is listening.</h1>
+   <p class="lead reveal">A friendly voice companion for medicines, meals, company and safety. No tiny buttons. No complicated apps.</p>
+   <div class="row reveal"><button class="btn main" data-go="dashboard">Start talking</button><a class="btn" href="#how" data-nav="how" style="text-decoration:none;display:grid;place-items:center">See how it works</a></div>
+  </div>
+  <div class="demo reveal" aria-label="Example conversation"><div class="bub u" id="d1"></div><div class="bub a" id="d2"></div></div>
+ </section>
+ <section id="features">
+  <h2 data-r>Four ways Sathi looks after you</h2>
+  <div class="grid">
+   <article class="card" data-r><svg viewBox="0 0 48 48"><rect x="17" y="5" width="14" height="25" rx="7"/><path d="M10 22a14 14 0 0 0 28 0M24 36v7M17 43h14"/></svg><h3>Natural voice companion</h3><p>Chat in everyday words. Ask questions, share feelings or hear a story. It listens and talks back.</p></article>
+   <article class="card" data-r><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="18"/><path d="M24 13v11l7 5"/></svg><h3>Smart daily reminders</h3><p>Medicines, meals, water and appointments. Add or change them by simply speaking.</p></article>
+   <article class="card" data-r><svg viewBox="0 0 48 48"><path d="M24 41S7 30 7 18a9 9 0 0 1 17-4 9 9 0 0 1 17 4c0 12-17 23-17 23Z"/></svg><h3>Well-being check-ins</h3><p>Sathi asks how you feel, offers kind company when you are lonely and suggests calling someone you trust.</p></article>
+   <article class="card" data-r><svg viewBox="0 0 48 48"><path d="M24 4 8 10v12c0 10 7 18 16 22 9-4 16-12 16-22V10Z"/><path d="m17 24 5 5 9-10"/></svg><h3>Family safety alerts</h3><p>Ask for help with one tap or one sentence. Family you have chosen, with their consent, is notified.</p></article>
+  </div>
+ </section>
+ <section id="how">
+  <h2 data-r>From your voice to your reminder in seconds</h2>
+  <div class="steps">
+   <div class="step" data-r><div><h3>You speak</h3><q>“Remind me to take my medicine at 8 PM.”</q></div></div>
+   <div class="step" data-r><div><h3>Sathi understands</h3><p>Speech recognition and AI work out what you want.</p></div></div>
+   <div class="step" data-r><div><h3>Reminder is saved</h3><p>Stored safely and shown on your dashboard at the right time.</p></div></div>
+   <div class="step" data-r><div><h3>Sathi answers aloud</h3><q>“Of course! I'll remind you at 8 PM.”</q></div></div>
+  </div>
+ </section>
+ <section id="about" class="about">
+  <h2 data-r>Built for people who find apps hard</h2>
+  <p data-r>Sathi means “companion”. It is made for seniors and the families who worry about them. Everything is voice first, with large buttons and clear text.</p>
+  <p data-r>Alerts go only to family members you add and who have your consent. Sathi is a companion, not a doctor. In an emergency, call your local emergency number.</p>
+  <div class="chips" data-r><b>Gemini AI</b><b>Web Speech API</b><b>Flask</b><b>Neon PostgreSQL</b><b>Three.js</b></div>
+ </section>
+</main>
+
+<main id="dash" hidden>
+ <section style="padding-top:1rem">
+  <h2 id="hi" style="margin-bottom:.5rem;max-width:none"></h2>
+  <div class="tabs" role="tablist"><button class="btn on" data-tab="talk">Talk</button><button class="btn" data-tab="rem">Reminders</button><button class="btn" data-tab="fam">Family</button><button class="btn" data-tab="well">Well-being</button></div>
+  <div class="panel on talk" id="p-talk">
+   <button id="mic" aria-label="Tap to talk"><svg viewBox="0 0 48 48"><rect x="17" y="5" width="14" height="25" rx="7"/><path d="M10 22a14 14 0 0 0 28 0M24 36v7"/></svg></button>
+   <div id="status" aria-live="polite">Tap and talk</div><div id="live"></div>
+   <div class="row" style="justify-content:center"><select id="lang" style="width:auto" aria-label="Language"><option value="en-IN">English (India)</option><option value="en-US">English (US)</option><option value="en-GB">English (UK)</option><option value="hi-IN">हिन्दी</option><option value="bn-IN">বাংলা</option><option value="ta-IN">தமிழ்</option><option value="te-IN">తెలుగు</option></select>
+    <button class="btn" id="chip1">Tell me a story</button><button class="btn" id="chip2">I feel lonely</button></div>
+   <form class="f" id="tf"><input id="ti" placeholder="Or type here…" aria-label="Type a message" autocomplete="off"><button class="btn main">Send</button></form>
+   <div class="box" id="log" aria-live="polite"></div>
+   <div class="row" style="justify-content:center"><button class="btn sos" id="sos" style="font-size:1.3rem;min-width:260px">I need help</button></div>
+  </div>
+  <div class="panel" id="p-rem"><div class="box"><form class="f" id="rf"><div><label>Reminder</label><input id="rt" required maxlength="140" placeholder="Take medicine"></div><div><label>Time</label><input id="rtm" type="time" required></div><div><label>Repeat</label><select id="rr"><option value="daily">Every day</option><option value="once">Once</option></select></div><button class="btn main">Add</button></form></div><div class="box" id="rl"></div><button class="btn sm" id="notif">Turn on phone notifications</button></div>
+  <div class="panel" id="p-fam"><div class="box"><form class="f" id="cf"><div><label>Name</label><input id="cn" required></div><div><label>Relationship</label><input id="cr" placeholder="Son"></div><div><label>Phone (with country code)</label><input id="cp" placeholder="919876543210"></div><div><label>Email</label><input id="ce" type="email"></div><label style="display:flex;gap:.6rem;align-items:center;grid-column:1/-1"><input id="cc" type="checkbox" style="width:28px;min-height:28px"> This person agrees to receive my help alerts</label><button class="btn main">Add contact</button></form></div><div class="box" id="cl"></div></div>
+  <div class="panel" id="p-well"><div class="box"><h3 style="margin-bottom:1rem">How are you feeling today?</h3><div class="moods" id="mood"></div></div><div class="box"><h3>Recent moods</h3><div id="ml"></div></div><div class="box"><h3>Help requests</h3><div id="al"></div></div></div>
+ </section>
+</main>
+<footer><p>Developed and deployed by Kaman Das ©2026</p><p>Made with Love ❤️</p></footer>
+</div>
+
+<dialog id="auth"><form id="af"><div class="big-t" id="at">Welcome</div>
+ <input id="an" placeholder="Your name" autocomplete="name" aria-label="Name"><input id="ae" type="email" placeholder="Email" required autocomplete="email" aria-label="Email"><input id="ap" type="password" placeholder="Password (8+ characters)" required minlength="8" autocomplete="current-password" aria-label="Password">
+ <div id="err" role="alert"></div><button class="btn main" id="asub">Continue</button><button type="button" class="btn" id="aswap"></button><button type="button" class="btn sm" id="aclose">Close</button></form></dialog>
+<dialog id="remd"><div class="big-t">Reminder</div><p id="remt" style="font-size:1.5rem;margin-bottom:1.2rem"></p><div class="row"><button class="btn main" id="rdone">Done</button><button class="btn" id="rsnz">Remind me in 10 min</button></div></dialog>
+<dialog id="sosd"><div class="big-t">Sending help request in <span id="cnt">5</span></div><button class="btn" id="scan">Cancel</button></dialog>
+<dialog id="helpd"><div class="big-t">Help request sent</div><div id="hb"></div><button class="btn sm" id="hclose" style="margin-top:1rem">Close</button></dialog>
+<div id="toast" role="status"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const nowT=()=>new Date().toTimeString().slice(0,5),todayD=()=>new Date().toLocaleDateString('sv');
+const S={user:null,d:{reminders:[],contacts:[],moods:[],alerts:[]},hist:[],snooze:{},shown:null};
+const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+async function api(p,b,m){const r=await fetch(p,{method:m||(b?'POST':'GET'),headers:{'Content-Type':'application/json'},body:b?JSON.stringify(b):undefined});const j=await r.json().catch(()=>({}));if(!r.ok)throw Error(j.error||'Something went wrong.');return j}
+let tt;function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>e.classList.remove('on'),3500)}
+
+/* ---------- 3D orb ---------- */
+const orb={state:'idle',view:'landing'};let renderer;
+try{
+ const cv=$('#bg');renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+ const scene=new THREE.Scene(),cam=new THREE.PerspectiveCamera(45,1,.1,100);cam.position.z=9;
+ scene.add(new THREE.AmbientLight(0xffffff,.55));
+ [[0x3de0c5,5,4,5],[0x8b7bff,-6,-3,4],[0xffb86b,0,5,-3]].forEach(l=>{const p=new THREE.PointLight(l[0],1.6,40);p.position.set(l[1],l[2],l[3]);scene.add(p)});
+ const g=new THREE.Group();scene.add(g);
+ const geo=new THREE.SphereGeometry(1.6,48,32),base=geo.attributes.position.array.slice();
+ const core=new THREE.Mesh(geo,new THREE.MeshStandardMaterial({color:0x5b6cff,emissive:0x1b1a6e,roughness:.25,metalness:.3}));g.add(core);
+ const wire=new THREE.Mesh(new THREE.SphereGeometry(2.05,24,16),new THREE.MeshBasicMaterial({color:0x3de0c5,wireframe:true,transparent:true,opacity:.14}));g.add(wire);
+ const rings=[0,1].map(i=>{const r=new THREE.Mesh(new THREE.TorusGeometry(2.7+i*.5,.025,12,120),new THREE.MeshBasicMaterial({color:i?0xffb86b:0x8b7bff}));r.rotation.x=1.2+i;g.add(r);return r});
+ const N=1500,pa=new Float32Array(N*3);for(let i=0;i<N;i++){const r=6+Math.random()*16,a=Math.random()*6.28,b=Math.acos(2*Math.random()-1);pa.set([r*Math.sin(b)*Math.cos(a),r*Math.sin(b)*Math.sin(a),r*Math.cos(b)],i*3)}
+ const pg=new THREE.BufferGeometry();pg.setAttribute('position',new THREE.BufferAttribute(pa,3));const pts=new THREE.Points(pg,new THREE.PointsMaterial({size:.06,color:0xbfd0ff,transparent:true,opacity:.8}));scene.add(pts);
+ const P=[[2.6,0,1,.47],[-3.2,0,.75,.72],[3,-.3,.9,.08],[-2.8,.2,1,.47]],secs=['home','features','how','about'].map(i=>document.getElementById(i));
+ const cur=[2.6,0,1,.47];let mx=0,my=0;
+ addEventListener('pointermove',e=>{mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5});
+ function size(){renderer.setSize(innerWidth,innerHeight,false);cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix()}addEventListener('resize',size);size();
+ function target(){if(orb.view==='dash')return[innerWidth<860?0:4.2,2.4,.55,.47];const y=scrollY+innerHeight*.5;let i=0;secs.forEach((s,k)=>{if(s.offsetTop<=y)i=k});const a=P[i],b=P[Math.min(i+1,3)],n=secs[i+1];let t=n?Math.min(1,Math.max(0,(y-secs[i].offsetTop)/(n.offsetTop-secs[i].offsetTop))):0;t=t*t*(3-2*t);const o=a.map((v,k)=>v+(b[k]-v)*t);if(innerWidth<860)o[0]=0;return o}
+ const amp={idle:.1,listening:.3,thinking:.18,speaking:.34};let t0=0;
+ (function loop(ts){requestAnimationFrame(loop);const t=ts/1000,tg=target();for(let k=0;k<4;k++)cur[k]+=(tg[k]-cur[k])*.06;
+  g.position.set(cur[0],cur[1],0);g.scale.setScalar(cur[2]);core.material.emissive.setHSL(cur[3],.7,.22);wire.material.color.setHSL(cur[3],.8,.6);
+  const a=amp[orb.state]*(orb.state==='speaking'?.7+.3*Math.sin(t*14):1),sp=orb.state==='thinking'?3:1,p=geo.attributes.position.array;
+  for(let i=0;i<p.length;i+=3){const x=base[i],y=base[i+1],z=base[i+2],d=1+a*(Math.sin(x*1.7+t*1.1*sp)+Math.sin(y*1.9+t*.9*sp)+Math.sin(z*1.5+t*1.3*sp))/3;p[i]=x*d;p[i+1]=y*d;p[i+2]=z*d}
+  geo.attributes.position.needsUpdate=true;geo.computeVertexNormals();
+  g.rotation.y=t*.15*sp+mx*.6;g.rotation.x=my*.4;wire.rotation.y=-t*.2;rings[0].rotation.z=t*.3;rings[1].rotation.z=-t*.22;pts.rotation.y=t*.01+scrollY*.0002;
+  cam.position.x+=(mx*.8-cam.position.x)*.04;cam.position.y+=(-my*.5-cam.position.y)*.04;cam.lookAt(0,0,0);renderer.render(scene,cam)})(0);
+}catch(e){console.warn('3D disabled',e);$('#bg')&&($('#bg').style.display='none')}
+function setSt(s){orb.state=s;const m=$('#mic');m.className=s==='idle'?'':s;$('#status').textContent={idle:'Tap and talk',listening:'Listening…',thinking:'Thinking…',speaking:'Speaking…'}[s]}
+
+/* ---------- scroll animation ---------- */
+if(window.gsap&&window.ScrollTrigger&&!reduce){
+ gsap.registerPlugin(ScrollTrigger);
+ const h=$('#h1');h.innerHTML=h.textContent.split(' ').map(w=>`<span>${w}</span>`).join(' ');
+ gsap.from('#h1 span',{y:70,rotateX:-70,opacity:0,stagger:.09,duration:1,ease:'power3.out'});gsap.from('.reveal',{opacity:0,y:30,delay:.7,stagger:.15,duration:.9});
+ gsap.to('.demo',{y:-60,scrollTrigger:{trigger:'#home',start:'top top',end:'bottom top',scrub:true}});
+ $$('[data-r]').forEach(e=>gsap.from(e,{y:60,opacity:0,duration:.9,ease:'power2.out',scrollTrigger:{trigger:e,start:'top 88%'}}));
+ $$('.step').forEach((e,i)=>gsap.from(e,{x:i%2?80:-80,opacity:0,scrollTrigger:{trigger:e,start:'top 90%',end:'top 55%',scrub:true}}));
+ gsap.to('#bar',{scaleX:1,ease:'none',scrollTrigger:{start:0,end:'max',scrub:true}});
+}
+$$('.card').forEach(c=>{c.addEventListener('pointermove',e=>{const r=c.getBoundingClientRect();c.style.setProperty('--ry',((e.clientX-r.left)/r.width-.5)*14+'deg');c.style.setProperty('--rx',(.5-(e.clientY-r.top)/r.height)*14+'deg')});c.addEventListener('pointerleave',()=>{c.style.setProperty('--rx','0deg');c.style.setProperty('--ry','0deg')})});
+(function demo(){const A='“Remind me to take my medicine at 8 PM.”',B='“Of course! I\'ll remind you at 8 PM.”';let i=0,j=0;const a=$('#d1'),b=$('#d2');(function tick(){if(i<A.length){a.textContent=A.slice(0,++i);setTimeout(tick,45)}else if(j<B.length){b.textContent=B.slice(0,++j);setTimeout(tick,40)}else setTimeout(()=>{i=j=0;a.textContent=b.textContent='';tick()},3500)})()})();
+
+/* ---------- navigation ---------- */
+function view(v,sec){orb.view=v==='dash'?'dash':'landing';$('#landing').hidden=v==='dash';$('#dash').hidden=v!=='dash';scrollTo(0,0);if(v!=='dash'){setTimeout(()=>{window.ScrollTrigger&&ScrollTrigger.refresh();sec&&document.getElementById(sec)?.scrollIntoView({behavior:'smooth'})},50)}$$('[data-nav]').forEach(a=>a.classList.toggle('on',a.dataset.nav===(v==='dash'?'dashboard':sec||'home')));$('#links').classList.remove('open')}
+function openDash(){if(!S.user)return openAuth('signup');view('dash');load()}
+document.addEventListener('click',e=>{const a=e.target.closest('[data-nav]'),g=e.target.closest('[data-go]');if(g){e.preventDefault();openDash()}else if(a){e.preventDefault();a.dataset.nav==='dashboard'?openDash():view('landing',a.dataset.nav)}});
+$('#burger').onclick=()=>$('#links').classList.toggle('open');$('#txt').onclick=()=>document.documentElement.classList.toggle('big');
+$$('[data-tab]').forEach(b=>b.onclick=()=>{$$('[data-tab]').forEach(x=>x.classList.toggle('on',x===b));$$('.panel').forEach(p=>p.classList.toggle('on',p.id==='p-'+b.dataset.tab))});
+
+/* ---------- auth ---------- */
+let mode='login';
+function openAuth(m){mode=m;const s=m==='signup';$('#at').textContent=s?'Create your account':'Welcome back';$('#an').hidden=!s;$('#an').required=s;$('#asub').textContent=s?'Create account':'Log in';$('#aswap').textContent=s?'I already have an account':'I am new here';$('#ap').autocomplete=s?'new-password':'current-password';$('#err').textContent='';$('#auth').showModal()}
+$('#bLogin').onclick=()=>openAuth('login');$('#bSign').onclick=()=>openAuth('signup');$('#aswap').onclick=()=>openAuth(mode==='signup'?'login':'signup');$('#aclose').onclick=()=>$('#auth').close();
+$('#af').onsubmit=async e=>{e.preventDefault();$('#asub').disabled=true;try{const r=await api('/api/auth/'+mode,{name:$('#an').value,email:$('#ae').value,password:$('#ap').value});$('#auth').close();setUser(r.user);openDash()}catch(x){$('#err').textContent=x.message}$('#asub').disabled=false};
+$('#bOut').onclick=async()=>{await api('/api/auth/logout',{}).catch(()=>{});setUser(null);view('landing','home')};
+function setUser(u){S.user=u;$('#guest').hidden=!!u;$('#usr').hidden=!u;if(u){const h=new Date().getHours();$('#hi').textContent=(h<12?'Good morning, ':h<17?'Good afternoon, ':'Good evening, ')+u.name.split(' ')[0]}}
+api('/api/auth/me').then(r=>r.user&&setUser(r.user)).catch(()=>{});
+
+/* ---------- data ---------- */
+async function load(){try{S.d=await api('/api/data');draw()}catch(x){toast(x.message)}}
+function draw(){const d=S.d,t=todayD();
+ $('#rl').innerHTML=d.reminders.length?d.reminders.map(r=>`<div class="item"><span><b>${esc(r.time_of_day)}</b> ${esc(r.text)}<small>${r.repeat_mode==='daily'?'Every day':'Once, '+esc(r.on_date)}</small></span><button class="btn sm" data-done="${r.id}">Done</button><button class="btn sm" data-rdel="${r.id}" aria-label="Delete">✕</button></div>`).join(''):'<p>No reminders yet. Say “Remind me to drink water at 11 AM”.</p>';
+ $('#cl').innerHTML=d.contacts.length?d.contacts.map(c=>`<div class="item"><span><b>${esc(c.name)}</b> ${esc(c.relationship||'')}<small>${esc(c.phone||'')} ${esc(c.email||'')} · ${c.consent?'Agreed to alerts':'No consent, will not be alerted'}</small></span><button class="btn sm" data-cdel="${c.id}">Remove</button></div>`).join(''):'<p>Add a family member to receive your help alerts.</p>';
+ const E={happy:'😊',okay:'😐',sad:'😔',lonely:'🫂',anxious:'😟',unwell:'🤒'};
+ $('#ml').innerHTML=d.moods.length?d.moods.map(m=>`<div class="item"><span>${E[m.mood]||''} ${esc(m.mood)}</span><small>${new Date(m.created_at).toLocaleString()}</small></div>`).join(''):'<p>Nothing yet.</p>';
+ $('#al').innerHTML=d.alerts.length?d.alerts.map(a=>`<div class="item"><span>${esc(a.message)}</span><small>${new Date(a.created_at).toLocaleString()}</small></div>`).join(''):'<p>No help requests.</p>';
+ $('#mood').innerHTML=Object.keys(E).map(k=>`<button class="btn" data-mood="${k}">${E[k]} ${k}</button>`).join('')}
+document.addEventListener('click',async e=>{const t=e.target.closest('button');if(!t)return;try{
+ if(t.dataset.done){await api('/api/reminders/'+t.dataset.done,{today:todayD()},'PATCH');load()}
+ if(t.dataset.rdel){await api('/api/reminders/'+t.dataset.rdel,null,'DELETE');load()}
+ if(t.dataset.cdel){await api('/api/contacts/'+t.dataset.cdel,null,'DELETE');load()}
+ if(t.dataset.mood){await api('/api/mood',{mood:t.dataset.mood});load();const m={happy:'I am so glad to hear that!',okay:'Thank you for telling me. I am here if you want to chat.',sad:'I am sorry you feel sad. Would you like to talk, or shall I tell you a story?',lonely:'You are not alone. I am right here with you. Would you like to call someone you love?',anxious:'Take a slow breath with me. I am here. Would you like to talk about it?',unwell:'I am sorry you are unwell. Please rest, and tell a family member or your doctor if it continues.'}[t.dataset.mood];toast(m);speak(m)}
+}catch(x){toast(x.message)}});
+$('#rf').onsubmit=async e=>{e.preventDefault();try{await api('/api/reminders',{text:$('#rt').value,time:$('#rtm').value,repeat:$('#rr').value,today:todayD(),now:nowT()});e.target.reset();load();toast('Reminder saved')}catch(x){toast(x.message)}};
+$('#cf').onsubmit=async e=>{e.preventDefault();try{await api('/api/contacts',{name:$('#cn').value,relationship:$('#cr').value,phone:$('#cp').value.replace(/[^\d+]/g,''),email:$('#ce').value,consent:$('#cc').checked});e.target.reset();load();toast('Contact saved')}catch(x){toast(x.message)}};
+
+/* ---------- voice + chat ---------- */
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;let rec;
+function speak(t){if(!('speechSynthesis' in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(String(t).replace(/[*_#`]/g,''));u.lang=$('#lang').value;u.rate=.9;u.onstart=()=>setSt('speaking');u.onend=u.onerror=()=>setSt('idle');speechSynthesis.speak(u)}
+function listen(){if(!SR)return toast('Voice input works in Chrome, Edge or Safari. You can type instead.');if(orb.state==='listening'){rec&&rec.stop();return}speechSynthesis.cancel();rec=new SR();rec.lang=$('#lang').value;rec.interimResults=true;let fin='',all='';
+ rec.onstart=()=>setSt('listening');rec.onresult=e=>{all='';fin='';for(const r of e.results){all+=r[0].transcript;if(r.isFinal)fin=all}$('#live').textContent=all};
+ rec.onerror=e=>toast(e.error==='not-allowed'?'Please allow the microphone in your browser.':'I could not hear you. Please try again.');
+ rec.onend=()=>{const t=(fin||all).trim();$('#live').textContent='';t?send(t):setSt('idle')};rec.start()}
+$('#mic').onclick=listen;
+function bub(c,t){const d=document.createElement('div');d.className='bub '+c;d.textContent=t;$('#log').append(d);$('#log').scrollTop=1e9}
+async function send(m){bub('u',m);setSt('thinking');try{const r=await api('/api/chat',{message:m,today:todayD(),now:nowT(),history:S.hist});S.hist.push({role:'user',text:m},{role:'ai',text:r.reply});bub('a',r.reply);speak(r.reply);if(orb.state==='thinking'&&!('speechSynthesis' in window))setSt('idle');if(r.refresh)load();if(r.alert)showHelp(r.alert);if(r.suggest_family)toast('Would you like to call someone you trust?')}catch(x){bub('a',x.message);setSt('idle')}}
+$('#tf').onsubmit=e=>{e.preventDefault();const v=$('#ti').value.trim();if(v){$('#ti').value='';send(v)}};
+$('#chip1').onclick=()=>send('Tell me a short story');$('#chip2').onclick=()=>send('I feel lonely today');
+
+/* ---------- SOS ---------- */
+let cd;$('#sos').onclick=()=>{let n=5;$('#cnt').textContent=n;$('#sosd').showModal();cd=setInterval(async()=>{$('#cnt').textContent=--n;if(n<=0){clearInterval(cd);$('#sosd').close();try{showHelp(await api('/api/help',{}));load()}catch(x){toast(x.message)}}},1000)};
+$('#scan').onclick=()=>{clearInterval(cd);$('#sosd').close()};$('#hclose').onclick=()=>$('#helpd').close();
+function showHelp(a){const c=a.contacts||[];$('#hb').innerHTML=c.length?'<p>Your help request is saved. Tap to reach your family now:</p>'+c.map(x=>`<div class="item"><span><b>${esc(x.name)}</b></span>${x.phone?`<a class="btn sm" href="tel:${esc(x.phone)}">Call</a><a class="btn sm" target="_blank" rel="noopener" href="https://wa.me/${esc(x.phone.replace(/\D/g,''))}?text=${encodeURIComponent('I need help. Please call me. - '+(S.user?.name||''))}">WhatsApp</a>`:''}</div>`).join('')+'<p style="margin-top:1rem">If it is an emergency, call your local emergency number.</p>':'<p>No family contact has agreed to alerts yet. Add one in the Family tab. If it is an emergency, call your local emergency number now.</p>';$('#helpd').showModal();speak('Your help request is sent.')}
+
+/* ---------- reminder alarm ---------- */
+$('#notif').onclick=async()=>{if(!('Notification' in window))return toast('Not supported on this browser');toast((await Notification.requestPermission())==='granted'?'Notifications are on':'Notifications are off')};
+setInterval(()=>{if(!S.user||$('#remd').open)return;const n=nowT(),t=todayD(),[nh,nm]=n.split(':').map(Number);
+ const r=S.d.reminders.find(r=>{const[h,m]=r.time_of_day.split(':').map(Number),diff=nh*60+nm-(h*60+m);return diff>=0&&diff<=120&&r.last_done!==t&&(r.repeat_mode==='daily'||r.on_date===t)&&(S.snooze[r.id]||0)<Date.now()});
+ if(!r)return;S.shown=r;$('#remt').textContent=r.text+' ('+r.time_of_day+')';$('#remd').showModal();speak('It is time. '+r.text);
+ if('Notification' in window&&Notification.permission==='granted')new Notification('Sathi reminder',{body:r.text})},15000);
+$('#rdone').onclick=async()=>{await api('/api/reminders/'+S.shown.id,{today:todayD()},'PATCH').catch(()=>{});$('#remd').close();load()};
+$('#rsnz').onclick=()=>{S.snooze[S.shown.id]=Date.now()+6e5;$('#remd').close()};
+</script>
+</body>
+</html>
